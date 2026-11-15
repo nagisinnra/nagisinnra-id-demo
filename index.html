@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="description" content="Nagisinnra ID single sign-on demo">
+  <title>Nagisinnra ID — Demo</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="./"><span class="brand-mark">N</span> Nagisinnra <span class="muted">Demo</span></a>
+      <span class="status"><span class="status-dot"></span> OIDC CLIENT</span>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">ONE ACCOUNT. MULTIPLE SERVICES.</p>
+      <h1>Welcome<span class="accent">.</span></h1>
+      <p class="intro">Nagisinnra IDでログインして、このデモサイトに接続します。</p>
+
+      <div class="panel">
+        <div class="panel-heading">
+          <div class="id-icon">N</div>
+          <div>
+            <h2>Nagisinnra ID</h2>
+            <p>Secure sign-in for connected services</p>
+          </div>
+        </div>
+        <button id="login" class="primary" type="button">Nagisinnra IDでログイン <span aria-hidden="true">→</span></button>
+        <button id="logout" class="secondary hidden" type="button">ログアウト</button>
+        <p id="message" class="message" role="status" aria-live="polite">ログインすると、アカウント情報がここに表示されます。</p>
+      </div>
+
+      <section id="account" class="account hidden" aria-live="polite">
+        <p class="eyebrow">SIGNED IN</p>
+        <h2>ログインしました。</h2>
+        <dl>
+          <div><dt>ユーザー名</dt><dd id="username">—</dd></div>
+          <div><dt>メールアドレス</dt><dd id="email">—</dd></div>
+          <div><dt>ユーザーID</dt><dd id="subject">—</dd></div>
+        </dl>
+      </section>
+    </section>
+
+    <footer>© 2026 Nagisinnra Technology</footer>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
