@@ -1,34 +1,52 @@
 # Nagisinnra ID Demo
 
-A static HTML/CSS/JavaScript relying-party demo for Nagisinnra ID.
+Static HTML/CSS/JavaScript demo using the hosted Nagisinnra ID Browser SDK.
 
-## Current status
+## Minimal integration
 
-The page is prepared for OpenID Connect Authorization Code Flow with PKCE. It is **not ready for real sign-in** until the provider is reachable and this site is registered as a public OIDC client.
+Add the SDK script and a mount element to any HTTPS HTML page:
 
-## Before enabling sign-in
+```html
+<script src="https://nagisinnra-id.netlify.app/sdk.js"></script>
+<div id="nagisinnra-login"></div>
 
-1. Publish this repository with GitHub Pages or Cloudflare Pages over HTTPS.
-2. Record the exact deployed URL.
-3. Register that URL as an allowed redirect URI in Nagisinnra ID.
-4. Set the public OIDC client ID in `app.js`.
-5. Confirm that the provider's discovery document, authorization endpoint, token endpoint, JWKS, and userinfo endpoint are working.
-6. Confirm that the provider allows this site's origin and redirect URI.
+<script>
+  (async () => {
+    await NagisinnraID.init({
+      clientId: "YOUR_PUBLIC_CLIENT_ID"
+    });
 
-The browser app is a public client. **Never put a client secret in `app.js` or any other browser file.**
+    await NagisinnraID.renderButton("#nagisinnra-login");
 
-## Configuration
+    NagisinnraID.onLogin((user) => {
+      console.log("Signed in:", user.profile);
+    });
+  })().catch(console.error);
+</script>
+```
 
-Edit the `settings` object at the top of `app.js`:
+The SDK uses the current page path as the redirect URI by default. It remembers the original page URL in OIDC state, processes the Authorization Code + PKCE callback, validates that the return URL belongs to the same origin, and returns the browser to that page.
 
-- `authority`: Nagisinnra ID issuer URL
-- `client_id`: client ID issued by Nagisinnra ID
-- `redirect_uri`: exact URL registered with the provider
+## Required provider setup
 
-The app uses the OIDC Authorization Code flow with PKCE through `oidc-client-ts`.
+Before real sign-in can work:
 
-## Files
+1. Deploy the Nagisinnra ID provider and confirm its OpenID discovery document works.
+2. Register this demo's exact HTTPS URL as a public OIDC client redirect URI.
+3. Configure the provider's allowed web origins/CORS for the demo site.
+4. Replace `YOUR_PUBLIC_CLIENT_ID` in `app.js` with the public client ID.
+5. Confirm authorization code + PKCE, token exchange, JWKS and userinfo endpoints work.
 
-- `index.html` — demo interface
-- `style.css` — responsive dark UI
-- `app.js` — OIDC client
+This is a browser public client. Never put a client secret in HTML or JavaScript.
+
+## SDK API
+
+- `NagisinnraID.init({ clientId, authority?, redirectUri?, scope? })`
+- `NagisinnraID.renderButton(selector, options?)`
+- `NagisinnraID.getUser()`
+- `NagisinnraID.onLogin(callback)`
+- `NagisinnraID.onLogout(callback)`
+- `NagisinnraID.onError(callback)`
+- `NagisinnraID.logout()` (local session logout)
+
+See the `SDK.md` file in the Nagisinnra ID repository for full documentation.
