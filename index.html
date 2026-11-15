@@ -28,9 +28,9 @@
             <p>Secure sign-in for connected services</p>
           </div>
         </div>
-        <button id="login" class="primary" type="button">Nagisinnra IDでログイン <span aria-hidden="true">→</span></button>
+        <div id="nagisinnra-login"></div>
         <button id="logout" class="secondary hidden" type="button">ログアウト</button>
-        <p id="message" class="message" role="status" aria-live="polite">ログインすると、アカウント情報がここに表示されます。</p>
+        <p id="message" class="message" role="status" aria-live="polite">Nagisinnra IDへ接続しています…</p>
       </div>
 
       <section id="account" class="account hidden" aria-live="polite">
@@ -46,6 +46,7 @@
 
     <footer>© 2026 Nagisinnra Technology</footer>
   </main>
-  <script type="module" src="./app.js"></script>
+  <script src="https://nagisinnra-id.netlify.app/sdk.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
