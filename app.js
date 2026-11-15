@@ -55,12 +55,24 @@ logoutButton.addEventListener("click", async () => {
   }
 });
 
+const params = new URLSearchParams(window.location.search);
+const isCallback = params.has("code") || params.has("state") || params.has("error");
+
 try {
-  const callbackUser = await manager.signinCallback();
-  const user = callbackUser || await manager.getUser();
-  if (user && !user.expired) showSignedIn(user);
-  else showSignedOut("ログインすると、アカウント情報がここに表示されます。");
+  if (isCallback) {
+    const callbackUser = await manager.signinCallback();
+    if (callbackUser && !callbackUser.expired) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      showSignedIn(callbackUser);
+    } else {
+      showSignedOut("ログイン状態を確認できませんでした。もう一度お試しください。");
+    }
+  } else {
+    const user = await manager.getUser();
+    if (user && !user.expired) showSignedIn(user);
+    else showSignedOut("ログインすると、アカウント情報がここに表示されます。");
+  }
 } catch (error) {
   console.error("OIDC callback error:", error);
-  showSignedOut("認証コールバックを処理できませんでした。Nagisinnra ID側の設定を確認してください。");
+  showSignedOut("認証を完了できませんでした。Nagisinnra ID側の設定を確認してください。");
 }
